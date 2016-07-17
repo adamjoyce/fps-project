@@ -37,9 +37,13 @@ void AFPSCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompon
     // Setup gameplay key bindings.
     InputComponent->BindAxis("MoveForward", this, &AFPSCharacter::MoveForward);
     InputComponent->BindAxis("MoveRight", this, &AFPSCharacter::MoveRight);
+    InputComponent->BindAxis("Turn", this, &AFPSCharacter::AddControllerYawInput);
+    InputComponent->BindAxis("LookUp", this, &AFPSCharacter::AddControllerPitchInput);
+    InputComponent->BindAction("Jump", IE_Pressed, this, &AFPSCharacter::OnStartJump);
+    InputComponent->BindAction("Jump", IE_Released, this, &AFPSCharacter::OnStopJump);
 }
 
-// Moves the character forwards or backwards.
+// Handles forward and backwards movement.
 void AFPSCharacter::MoveForward(float Value)
 {
     if (Controller != NULL && Value != 0.0f)
@@ -59,7 +63,7 @@ void AFPSCharacter::MoveForward(float Value)
     }
 }
 
-// Moves the character left or right.
+// Handles strafing movement.
 void AFPSCharacter::MoveRight(float Value)
 {
     if (Controller != NULL && Value != 0.0f)
@@ -71,5 +75,17 @@ void AFPSCharacter::MoveRight(float Value)
         const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
         AddMovementInput(Direction, Value);
     }
+}
+
+// Sets the jump flag when key is pressed.
+void AFPSCharacter::OnStartJump()
+{
+    bPressedJump = true;
+}
+
+// Clears the jump flag when key is released.
+void AFPSCharacter::OnStopJump()
+{
+    bPressedJump = false;
 }
 

@@ -32,4 +32,12 @@ protected:
     // Handles strafing movement.
     UFUNCTION()
     void MoveRight(float Val);
+
+    // Sets the jump flag when key is pressed.
+    UFUNCTION()
+    void OnStartJump();
+
+    // Clears the jump flag when key is released.
+    UFUNCTION()
+    void OnStopJump();
 };

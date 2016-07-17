@@ -2,11 +2,15 @@
 
 #include "FPSProject.h"
 #include "FPSProjectGameMode.h"
-#include "FPSCharacter.h"
 
 AFPSProjectGameMode::AFPSProjectGameMode(const FObjectInitializer& ObjectInitiliazer) : Super(ObjectInitiliazer)
 {
-    DefaultPawnClass = AFPSCharacter::StaticClass();
+    // Sets the default pawn class to our FPSCharacter blueprint.
+    static ConstructorHelpers::FClassFinder<APawn> PlayerPawnObject(TEXT("Blueprint'/Game/Blueprints/BP_FPSCharacter.BP_FPSCharacter_C'"));
+    if (PlayerPawnObject.Class != NULL)
+    {
+        DefaultPawnClass = PlayerPawnObject.Class;
+    }
 }
 
 void AFPSProjectGameMode::StartPlay()
