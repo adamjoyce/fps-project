@@ -5,11 +5,22 @@
 
 
 // Sets default values
-AFPSCharacter::AFPSCharacter()
+AFPSCharacter::AFPSCharacter(const FObjectInitializer& ObjectInitializer)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+    // Create the FPS camera component.
+    FirstPersonCameraComponent = ObjectInitializer.CreateDefaultSubobject<UCameraComponent>(this, TEXT("First person camera"));
+
+    // Position the camera just above the character's eyeline.
+    FirstPersonCameraComponent->RelativeLocation = FVector(0, 0, 50.0f + BaseEyeHeight);
+
+    // Allow the pawn to control roation.
+    FirstPersonCameraComponent->bUsePawnControlRotation = true;
+
+    // Pair the camera with the FPSCharacter.
+    FirstPersonCameraComponent->AttachParent = GetCapsuleComponent();
 }
 
 // Called when the game starts or when spawned

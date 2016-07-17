@@ -11,8 +11,12 @@ class FPSPROJECT_API AFPSCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+    /** First person camera */
+    UPROPERTY()
+    UCameraComponent* FirstPersonCameraComponent;
+
 	// Sets default values for this character's properties
-	AFPSCharacter();
+	AFPSCharacter(const FObjectInitializer& ObjectInitializer);
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
