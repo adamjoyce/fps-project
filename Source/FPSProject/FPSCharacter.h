@@ -11,13 +11,21 @@ class FPSPROJECT_API AFPSCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-    /** First person camera. */
+    // First person camera.
     UPROPERTY()
     UCameraComponent* FirstPersonCameraComponent;
 
-    /** Pawn mesh: 1st person view (arms; seen only by self). */
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    // Pawn mesh: 1st person view (arms; seen only by self).
+    UPROPERTY(VisibleDefaultsOnly, Category="Mesh")
     USkeletalMeshComponent* FirstPersonMesh;
+
+    // Gun muzzle's offset from the camera location.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Gameplay")
+    FVector MuzzleOffset;
+
+    // Projectile class to spawn.
+    UPROPERTY(EditDefaultsOnly, Category="Projectile")
+    TSubclassOf<class AFPSProjectile> ProjectileClass;
 
 	// Sets default values for this character's properties.
 	AFPSCharacter(const FObjectInitializer& ObjectInitializer);
@@ -28,6 +36,9 @@ public:
 	// Called every frame.
 	virtual void Tick( float DeltaSeconds ) override;
 
+    // Handles firing.
+    UFUNCTION()
+    void OnFire();
 
 protected:
     // Called to bind functionality to input.
