@@ -21,6 +21,16 @@ AFPSCharacter::AFPSCharacter(const FObjectInitializer& ObjectInitializer)
 
     // Pair the camera with the FPSCharacter.
     FirstPersonCameraComponent->AttachParent = GetCapsuleComponent();
+
+    // Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn).
+    FirstPersonMesh = ObjectInitializer.CreateDefaultSubobject<USkeletalMeshComponent>(this, TEXT("FirstPersonMesh"));
+    FirstPersonMesh->SetOnlyOwnerSee(true);
+    FirstPersonMesh->AttachParent = FirstPersonCameraComponent;
+    FirstPersonMesh->bCastDynamicShadow = false;
+    FirstPersonMesh->CastShadow = false;
+
+    // Everyone but the owner can see the third person mesh.
+    GetMesh()->SetOwnerNoSee(true);
 }
 
 // Called when the game starts or when spawned
