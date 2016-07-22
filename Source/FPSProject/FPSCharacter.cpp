@@ -118,7 +118,7 @@ void AFPSCharacter::OnFire()
         FVector const MuzzleLocation = CameraLoc + FTransform(CameraRot).TransformVector(MuzzleOffset);
         FRotator MuzzleRotation = CameraRot;
         // Skew the aim upwards.
-        MuzzleRotation.Pitch += 10.0f;
+        MuzzleRotation.Pitch += 5.75f;
 
         UWorld* const World = GetWorld();
         if (World)
