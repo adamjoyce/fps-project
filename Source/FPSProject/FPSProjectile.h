@@ -30,4 +30,8 @@ public:
 
     // Initialises velocity of the projectile in the shoot direction.
     void InitVelocity(const FVector& ShootDirection);
+
+    // Called when projectile hits something.
+    UFUNCTION()
+    void OnHit(UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };
