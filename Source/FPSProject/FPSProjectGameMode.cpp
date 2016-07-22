@@ -2,6 +2,7 @@
 
 #include "FPSProject.h"
 #include "FPSProjectGameMode.h"
+#include "FPSHUD.h"
 
 AFPSProjectGameMode::AFPSProjectGameMode(const FObjectInitializer& ObjectInitiliazer) : Super(ObjectInitiliazer)
 {
@@ -10,6 +11,7 @@ AFPSProjectGameMode::AFPSProjectGameMode(const FObjectInitializer& ObjectInitili
     if (PlayerPawnObject.Class != NULL)
     {
         DefaultPawnClass = PlayerPawnObject.Class;
+        HUDClass = AFPSHUD::StaticClass();
     }
 }
 
