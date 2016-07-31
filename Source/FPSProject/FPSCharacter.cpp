@@ -148,6 +148,7 @@ void AFPSCharacter::OnProjectileFire()
     }
 }
 
+// COMMENT THIS SHIZ.
 void AFPSCharacter::OnHitscanFire()
 {
     // Get camera transform.
@@ -171,7 +172,7 @@ void AFPSCharacter::OnHitscanFire()
         World->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECC_Visibility, TraceParams);
         DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, true, 0.0f);
 
-        if (Hit.GetActor() != NULL)
+        if (Hit.GetActor() != NULL && Hit.GetActor()->ActorHasTag("NoImpulse") == false)
         {
             Hit.GetComponent()->AddImpulseAtLocation(Direction * HitscanImpulse, Hit.ImpactPoint);
         }
