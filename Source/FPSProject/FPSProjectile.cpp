@@ -52,7 +52,7 @@ void AFPSProjectile::InitVelocity(const FVector& ShootDirection)
 
 void AFPSProjectile::OnHit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-    if (OtherActor && (OtherActor != this) && OtherComp)
+    if (OtherActor && (OtherActor != this) && OtherComp && OtherActor->ActorHasTag("NoImpulse") == false)
     {
         OtherComp->AddImpulseAtLocation(ProjectileMovement->Velocity * 100.0f, Hit.ImpactPoint);
     }
