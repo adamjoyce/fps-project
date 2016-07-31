@@ -36,9 +36,13 @@ public:
 	// Called every frame.
 	virtual void Tick( float DeltaSeconds ) override;
 
-    // Handles firing.
+    // Handles firing the projectiles.
     UFUNCTION()
-    void OnFire();
+    void OnProjectileFire();
+
+    // Handles firing hitscan projectiles.
+    UFUNCTION()
+    void OnHitscanFire();
 
 protected:
     // Called to bind functionality to input.
@@ -59,4 +63,11 @@ protected:
     // Clears the jump flag when key is released.
     UFUNCTION()
     void OnStopJump();
+
+private:
+    UPROPERTY()
+    float MaxRaycastDistance;
+
+    UPROPERTY()
+    float HitscanImpulse;
 };

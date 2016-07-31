@@ -10,6 +10,12 @@ AFPSCharacter::AFPSCharacter(const FObjectInitializer& ObjectInitializer)
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+    // How far the Hitscan ray will travel.
+    MaxRaycastDistance = 10000.0f;
+
+    // The force applied to an object when hit with the hitscan weapon.
+    HitscanImpulse = 300000.0f;
+
     // Create the FPS camera component.
     FirstPersonCameraComponent = ObjectInitializer.CreateDefaultSubobject<UCameraComponent>(this, TEXT("First person camera"));
 
@@ -52,14 +58,17 @@ void AFPSCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompon
 {
 	Super::SetupPlayerInputComponent(InputComponent);
 
-    // Setup gameplay key bindings.
+    // Player movement.
     InputComponent->BindAxis("MoveForward", this, &AFPSCharacter::MoveForward);
     InputComponent->BindAxis("MoveRight", this, &AFPSCharacter::MoveRight);
     InputComponent->BindAxis("Turn", this, &AFPSCharacter::AddControllerYawInput);
     InputComponent->BindAxis("LookUp", this, &AFPSCharacter::AddControllerPitchInput);
     InputComponent->BindAction("Jump", IE_Pressed, this, &AFPSCharacter::OnStartJump);
     InputComponent->BindAction("Jump", IE_Released, this, &AFPSCharacter::OnStopJump);
-    InputComponent->BindAction("Fire", IE_Pressed, this, &AFPSCharacter::OnFire);
+
+    // Weapon actions.
+    InputComponent->BindAction("FireProjectile", IE_Pressed, this, &AFPSCharacter::OnProjectileFire);
+    InputComponent->BindAction("FireHitscan", IE_Pressed, this, &AFPSCharacter::OnHitscanFire);
 }
 
 void AFPSCharacter::MoveForward(float Value)
@@ -104,7 +113,7 @@ void AFPSCharacter::OnStopJump()
     bPressedJump = false;
 }
 
-void AFPSCharacter::OnFire()
+void AFPSCharacter::OnProjectileFire()
 {
     // Try and fire a projectile.
     if (ProjectileClass != NULL)
@@ -135,6 +144,36 @@ void AFPSCharacter::OnFire()
                 FVector const LaunchDir = MuzzleRotation.Vector();
                 Projectile->InitVelocity(LaunchDir);
             }
+        }
+    }
+}
+
+void AFPSCharacter::OnHitscanFire()
+{
+    // Get camera transform.
+    FVector CameraLoc;
+    FRotator CameraRot;
+    Controller->GetPlayerViewPoint(CameraLoc, CameraRot);
+
+    const FVector TraceStart = CameraLoc;
+    const FVector Direction = CameraRot.Vector();
+    const FVector TraceEnd = TraceStart + (Direction * MaxRaycastDistance);
+
+    FCollisionQueryParams TraceParams(FName(TEXT("TraceHitScanFire")), true, this);
+    TraceParams.bTraceAsyncScene = true;
+    TraceParams.bReturnPhysicalMaterial = false;
+    TraceParams.bTraceComplex = true;
+
+    FHitResult Hit(ForceInit);
+    UWorld* const World = GetWorld();
+    if (World)
+    {
+        World->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECC_Visibility, TraceParams);
+        DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, true, 0.0f);
+
+        if (Hit.GetActor() != NULL)
+        {
+            Hit.GetComponent()->AddImpulseAtLocation(Direction * HitscanImpulse, Hit.ImpactPoint);
         }
     }
 }
