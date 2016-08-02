@@ -14,7 +14,7 @@ void AFPSGravityProjectile::OnHit(UPrimitiveComponent* OverlappedComponent, clas
 {
     if (OtherActor && (OtherActor != this) && OtherComp)
     {
-        RadialForceComp->SetRelativeLocation(CollisionComp->RelativeLocation);
+        RadialForceComp->SetRelativeLocation(FVector(CollisionComp->RelativeLocation.X, CollisionComp->RelativeLocation.Y, CollisionComp->RelativeLocation.Z + 300.0f));
         RadialForceComp->SetActive(true);
     }
 }
