@@ -6,7 +6,7 @@
 AFPSGravityProjectile::AFPSGravityProjectile(const FObjectInitializer& ObjectInitializer) : AFPSProjectile(ObjectInitializer) 
 {
     RadialForceComp = ObjectInitializer.CreateDefaultSubobject<URadialForceComponent>(this, TEXT("RadialForceComp"));
-    RadialForceComp->ForceStrength = -10000000.0f;
+    RadialForceComp->ForceStrength = -5000000.0f;
     RadialForceComp->Radius = 1000.0f;
 }
 
