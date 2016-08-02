@@ -7,7 +7,7 @@
 AFPSProjectile::AFPSProjectile(const FObjectInitializer& ObjectInitializer)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
     // Use a sphere as a simple collision representation.
     CollisionComp = ObjectInitializer.CreateDefaultSubobject<USphereComponent>(this, TEXT("SphereComp"));
@@ -47,6 +47,7 @@ void AFPSProjectile::InitVelocity(const FVector& ShootDirection)
     {
         // Set the projectile's velocity to the desired direction.
         ProjectileMovement->Velocity = ShootDirection * ProjectileMovement->InitialSpeed;
+        //UE_LOG(LogTemp, Warning, TEXT("Velocity: %s"), *ProjectileMovement->Velocity.ToString());
     }
 }
 

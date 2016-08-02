@@ -51,7 +51,6 @@ void AFPSCharacter::BeginPlay()
 void AFPSCharacter::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
-
 }
 
 void AFPSCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
@@ -148,18 +147,17 @@ void AFPSCharacter::OnProjectileFire()
     }
 }
 
-// COMMENT THIS SHIZ.
 void AFPSCharacter::OnHitscanFire()
 {
-    // Get camera transform.
+    // Get the camera point of view.
     FVector CameraLoc;
     FRotator CameraRot;
     Controller->GetPlayerViewPoint(CameraLoc, CameraRot);
 
+    // Trace variables and parameters.
     const FVector TraceStart = CameraLoc;
     const FVector Direction = CameraRot.Vector();
     const FVector TraceEnd = TraceStart + (Direction * MaxRaycastDistance);
-
     FCollisionQueryParams TraceParams(FName(TEXT("TraceHitScanFire")), true, this);
     TraceParams.bTraceAsyncScene = true;
     TraceParams.bReturnPhysicalMaterial = false;
@@ -170,8 +168,9 @@ void AFPSCharacter::OnHitscanFire()
     if (World)
     {
         World->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECC_Visibility, TraceParams);
-        DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, true, 0.0f);
+        DrawDebugLine(World, TraceStart, TraceEnd, FColor::Red, false, 1.0f);
 
+        // Ignore static actors such as the floor.
         if (Hit.GetActor() != NULL && Hit.GetActor()->ActorHasTag("NoImpulse") == false)
         {
             Hit.GetComponent()->AddImpulseAtLocation(Direction * HitscanImpulse, Hit.ImpactPoint);
